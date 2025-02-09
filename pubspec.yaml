@@ -57,6 +57,11 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  fonts:
+    - family: Modak
+      fonts:
+        - asset: fonts/Modak-Regular.ttf
+
   assets:
     - assets/icons/
     - assets/images/
