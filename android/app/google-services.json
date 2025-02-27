@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "530540725142",
+    "project_id": "gosar-dcebe",
+    "storage_bucket": "gosar-dcebe.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:530540725142:android:57d6180e4f4cdb2c0d93b7",
+        "android_client_info": {
+          "package_name": "com.example.gdg_soogsil_solution_challenge_1team_frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "530540725142-7emgrrck0nnijo4i8goe77ajjgl7vov9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gdg_soogsil_solution_challenge_1team_frontend",
+            "certificate_hash": "796dfc0a0db826cd4ddd2de05fc764ab240548bf"
+          }
+        },
+        {
+          "client_id": "530540725142-qrr975kuob6k54epbc91dti01rg0fi09.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKIjl18MnhBVbzJTcHHi1bxtDuL1-HK9s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "530540725142-qrr975kuob6k54epbc91dti01rg0fi09.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "530540725142-p3m1flvlmss35or9hltkfijp3ee64v3i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.gdgSoogsilSolutionChallenge1teamFrontend"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
