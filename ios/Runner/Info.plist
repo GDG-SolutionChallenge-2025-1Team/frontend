@@ -22,6 +22,17 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.10124103169-u5617rvulk8qpmtha3nnfot15o2sd3ve</string>
+			</array>
+		</dict>
+	</array>
+	<key>GoogleService-Info.plist</key>
+	<string>10124103169-u5617rvulk8qpmtha3nnfot15o2sd3ve.apps.googleusercontent.com</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

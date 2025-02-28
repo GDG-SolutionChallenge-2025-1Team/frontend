@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/routes.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/home/home_screen.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/settings/settings_screen.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/start/start_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
