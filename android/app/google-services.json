@@ -12,7 +12,20 @@
           "package_name": "com.example.gdg_soogsil_solution_challenge_1team_frontend"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "884979148308-2iodau9c2960qge52et6mvm0mcdqqib7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gdg_soogsil_solution_challenge_1team_frontend",
+            "certificate_hash": "86a3a98174cca06f4f4f0ee8b1ebf2189a81f223"
+          }
+        },
+        {
+          "client_id": "884979148308-ejvsueoeinj9p98e44ca265u1s4idlj2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBZ9AF_vUdFk4v-H4zrZDlmM22PhaFWeLA"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "884979148308-ejvsueoeinj9p98e44ca265u1s4idlj2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "884979148308-j40kk4pm062thl5823prv3qlpdvakngr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.gdgSoogsilSolutionChallenge1teamFrontend"
+              }
+            }
+          ]
         }
       }
     }
