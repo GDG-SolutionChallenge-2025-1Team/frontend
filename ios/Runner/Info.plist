@@ -27,13 +27,13 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.10124103169-u5617rvulk8qpmtha3nnfot15o2sd3ve</string>
+				<string>com.googleusercontent.apps.884979148308-j40kk4pm062thl5823prv3qlpdvakngr</string>
 			</array>
 		</dict>
 	</array>
-	<key>GoogleService-Info.plist</key>
-	<string>10124103169-u5617rvulk8qpmtha3nnfot15o2sd3ve.apps.googleusercontent.com</string>
-	<key>LSRequiresIPhoneOS</key>
+	<key>GIDClientID</key>
+	<string>884979148308-j40kk4pm062thl5823prv3qlpdvakngr.apps.googleusercontent.com</string>
+	<key>LSRequiresIPhoeOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

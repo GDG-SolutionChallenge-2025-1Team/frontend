@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "884979148308",
+    "project_id": "login-admin-9eaaf",
+    "storage_bucket": "login-admin-9eaaf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884979148308:android:cd9145becc29fa33986901",
+        "android_client_info": {
+          "package_name": "com.example.gdg_soogsil_solution_challenge_1team_frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZ9AF_vUdFk4v-H4zrZDlmM22PhaFWeLA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

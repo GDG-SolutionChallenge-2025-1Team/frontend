@@ -24,22 +24,6 @@ class AuthService {
           await _auth.signInWithCredential(credential);
       User? user = userCredential.user;
 
-      if (user != null) {
-        final String? token = await user.getIdToken();
-
-        if (token != null) {
-          print("\n===== ID 토큰 시작 =====");
-// 더 작은 청크로 나누어 출력
-          int chunkSize = 100; // 더 작은 청크 크기
-          for (int i = 0; i < token.length; i += chunkSize) {
-            int end =
-                (i + chunkSize < token.length) ? i + chunkSize : token.length;
-            print("부분 ${i ~/ chunkSize + 1}: ${token.substring(i, end)}");
-          }
-          print("===== ID 토큰 끝 =====\n");
-        }
-      }
-
       return user;
     } catch (e) {
       print("Google 로그인 오류: $e");

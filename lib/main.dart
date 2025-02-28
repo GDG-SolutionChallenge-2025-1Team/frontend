@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/routes.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/home/home_screen.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/settings/settings_screen.dart';
@@ -7,7 +8,10 @@ import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/start/star
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    name: '고사리',
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
