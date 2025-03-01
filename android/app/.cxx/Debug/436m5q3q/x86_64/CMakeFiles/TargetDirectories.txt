@@ -1,0 +1,2 @@
+C:/Users/m8160/github/SolutionChallenge-2025/frontend/android/app/.cxx/Debug/436m5q3q/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/m8160/github/SolutionChallenge-2025/frontend/android/app/.cxx/Debug/436m5q3q/x86_64/CMakeFiles/rebuild_cache.dir

@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "884979148308-2iodau9c2960qge52et6mvm0mcdqqib7.apps.googleusercontent.com",
+          "client_id": "884979148308-cjbucc6u0bjmi2u3pfdpnm0bnah8vo0h.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.gdg_soogsil_solution_challenge_1team_frontend",
-            "certificate_hash": "86a3a98174cca06f4f4f0ee8b1ebf2189a81f223"
+            "certificate_hash": "3c9f3bd85f16643b75e1a42be51de41858cc9ae7"
           }
         },
         {
