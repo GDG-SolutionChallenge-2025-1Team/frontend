@@ -64,6 +64,10 @@ flutter:
     - family: Modak
       fonts:
         - asset: fonts/Modak-Regular.ttf
+        
+    - family: BMJUA
+      fonts:
+        - asset: fonts/BMJUA_ttf.ttf
 
   assets:
     - assets/icons/

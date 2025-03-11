@@ -5,6 +5,9 @@ import 'package:gdg_soogsil_solution_challenge_1team_frontend/routes.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/home/home_screen.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/settings/settings_screen.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/start/start_screen.dart';
+import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/daily_study/daily_study.dart';
+import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/review/review.dart';
+import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/calendar/calendar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +28,10 @@ class MyApp extends StatelessWidget {
       routes: {
         AppRoutes.start: (context) => StartScreen(),
         AppRoutes.home: (context) => HomeScreen(),
-        AppRoutes.settings: (context) => SettingsScreen()
+        AppRoutes.settings: (context) => SettingsScreen(),
+        AppRoutes.dailyStudy: (context) => DailyStudyScreen(),
+        AppRoutes.review: (context) => ReviewScreen(),
+        AppRoutes.calendar: (context) => CalendarScreen(),
       },
     );
   }

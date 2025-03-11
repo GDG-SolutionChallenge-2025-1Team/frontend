@@ -3,8 +3,11 @@ import 'package:gdg_soogsil_solution_challenge_1team_frontend/core/theme/app_col
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/widgets/wave_painter.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/widgets/login/google_login_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/home/home_screen.dart';
 
 class StartScreen extends StatelessWidget {
+  const StartScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,9 +55,9 @@ class StartScreen extends StatelessWidget {
               children: [
                 // 'GO' 텍스트
                 Text(
-                  'GO SARI',
+                  '고사리',
                   style: TextStyle(
-                    fontFamily: 'Modak',
+                    fontFamily: 'BMJUA',
                     fontSize: 85,
                     color: AppColors.textSkyBlue,
                     shadows: [
@@ -86,6 +89,10 @@ class StartScreen extends StatelessWidget {
                   onLoginSuccess: (User? user) {
                     if (user != null) {
                       print("로그인 성공: ${user.displayName}");
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                      );
                     } else {
                       print('로그인 실패');
                     }
