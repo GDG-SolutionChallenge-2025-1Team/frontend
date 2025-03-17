@@ -3,8 +3,8 @@ import 'package:gdg_soogsil_solution_challenge_1team_frontend/core/theme/app_col
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/widgets/wave_painter.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/routes.dart';
 
-class DailyStudyScreen extends StatelessWidget {
-  const DailyStudyScreen({super.key});
+class DailyStudyScreen3 extends StatelessWidget {
+  const DailyStudyScreen3({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,44 +46,35 @@ class DailyStudyScreen extends StatelessWidget {
               ),
             ),
           ),
-          Center(
-            child: Container(
-              width: 300,
-              height: 250,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 10,
-                    spreadRadius: 2,
-                    offset: Offset(0, 5),
-                  ),
-                ],
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.3,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Text(
+                '지금은\n문장을n배우는 시간!',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 60,
+                  color: AppColors.textBrown,
+                  fontFamily: 'BMJUA',
+                ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '오늘의 주제!',
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontFamily: 'BMJUA',
-                      color: AppColors.textBrown,
-                    ),
+            ),
+          ),
+          Positioned(
+            bottom: -120,
+            left: -50,
+            child: SizedBox(
+              child: ClipRect(
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Image.asset(
+                    'assets/images/image_bear.png',
+                    fit: BoxFit.cover,
+                    height: 500,
                   ),
-                  SizedBox(height: 10),
-                  Text(
-                    '행복',
-                    style: TextStyle(
-                      fontSize: 60,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'BMJUA',
-                      color: AppColors.textPink,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
@@ -110,7 +101,7 @@ class DailyStudyScreen extends StatelessWidget {
             right: 20,
             child: GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, AppRoutes.dailyStudy1);
+                Navigator.pushNamed(context, AppRoutes.dailyStudy2);
               },
               child: Image.asset(
                 'assets/icons/icon_next_button.png',
@@ -125,7 +116,7 @@ class DailyStudyScreen extends StatelessWidget {
             right: 0,
             child: Center(
               child: Text(
-                '1',
+                '4',
                 style: TextStyle(
                   fontSize: 60,
                   fontWeight: FontWeight.bold,

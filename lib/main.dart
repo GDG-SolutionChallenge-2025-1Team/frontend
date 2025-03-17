@@ -6,6 +6,8 @@ import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/home/home_
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/settings/settings_screen.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/start/start_screen.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/daily_study/daily_study.dart';
+import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/daily_study/daily_study_1.dart';
+import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/daily_study/daily_study_2.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/review/review.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/calendar/calendar.dart';
 
@@ -32,6 +34,9 @@ class MyApp extends StatelessWidget {
         AppRoutes.dailyStudy: (context) => DailyStudyScreen(),
         AppRoutes.review: (context) => ReviewScreen(),
         AppRoutes.calendar: (context) => CalendarScreen(),
+        AppRoutes.dailyStudy1: (context) => DailyStudyScreen1(),
+        AppRoutes.dailyStudy2: (context) => DailyStudyScreen2(),
+        AppRoutes.dailyStudy3: (context) => DailyStudyScreen2(),
       },
     );
   }

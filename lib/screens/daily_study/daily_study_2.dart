@@ -3,8 +3,8 @@ import 'package:gdg_soogsil_solution_challenge_1team_frontend/core/theme/app_col
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/widgets/wave_painter.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/routes.dart';
 
-class DailyStudyScreen extends StatelessWidget {
-  const DailyStudyScreen({super.key});
+class DailyStudyScreen2 extends StatelessWidget {
+  const DailyStudyScreen2({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +125,7 @@ class DailyStudyScreen extends StatelessWidget {
             right: 0,
             child: Center(
               child: Text(
-                '1',
+                '3',
                 style: TextStyle(
                   fontSize: 60,
                   fontWeight: FontWeight.bold,
