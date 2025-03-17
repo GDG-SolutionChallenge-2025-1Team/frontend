@@ -52,7 +52,7 @@ class DailyStudyScreen4 extends StatelessWidget {
               children: [
                 Container(
                   width: 300,
-                  height: 400,
+                  height: 300,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
@@ -65,18 +65,16 @@ class DailyStudyScreen4 extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Text(
-                        '친구에게 선물을 받아 행복해요',
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontFamily: 'BMJUA',
-                          color: AppColors.textBlack,
-                        ),
-                      ),
-                    ],
+                ),
+                SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    '친구에게 선물을 받아\n행복해요',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: AppColors.textBlack,
+                    ),
                   ),
                 ),
                 SizedBox(height: 20),
@@ -87,8 +85,8 @@ class DailyStudyScreen4 extends StatelessWidget {
                       alignment: Alignment.center,
                       children: [
                         Container(
-                          width: 150,
-                          height: 150,
+                          width: 130,
+                          height: 130,
                           decoration: BoxDecoration(
                             color: AppColors.buttonYellow,
                             borderRadius: BorderRadius.circular(45),
@@ -117,8 +115,8 @@ class DailyStudyScreen4 extends StatelessWidget {
                       alignment: Alignment.center,
                       children: [
                         Container(
-                          width: 150,
-                          height: 150,
+                          width: 130,
+                          height: 130,
                           decoration: BoxDecoration(
                             color: AppColors.buttonYellow,
                             borderRadius: BorderRadius.circular(45),
@@ -185,7 +183,7 @@ class DailyStudyScreen4 extends StatelessWidget {
             right: 0,
             child: Center(
               child: Text(
-                '3',
+                '4',
                 style: TextStyle(
                   fontSize: 60,
                   fontWeight: FontWeight.bold,
