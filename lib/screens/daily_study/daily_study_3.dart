@@ -52,7 +52,7 @@ class DailyStudyScreen3 extends StatelessWidget {
             right: 0,
             child: Center(
               child: Text(
-                '지금은\n문장을n배우는 시간!',
+                '지금은\n문장을\n배우는 시간!',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 60,
@@ -101,7 +101,7 @@ class DailyStudyScreen3 extends StatelessWidget {
             right: 20,
             child: GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, AppRoutes.dailyStudy2);
+                Navigator.pushNamed(context, AppRoutes.dailyStudy4);
               },
               child: Image.asset(
                 'assets/icons/icon_next_button.png',

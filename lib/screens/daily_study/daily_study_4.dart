@@ -3,8 +3,8 @@ import 'package:gdg_soogsil_solution_challenge_1team_frontend/core/theme/app_col
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/widgets/wave_painter.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/routes.dart';
 
-class DailyStudyScreen2 extends StatelessWidget {
-  const DailyStudyScreen2({super.key});
+class DailyStudyScreen4 extends StatelessWidget {
+  const DailyStudyScreen4({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -50,18 +50,9 @@ class DailyStudyScreen2 extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  '단어',
-                  style: TextStyle(
-                    fontSize: 50,
-                    fontFamily: 'BMJUA',
-                    color: AppColors.textBlack,
-                  ),
-                ),
-                SizedBox(height: 40),
                 Container(
                   width: 300,
-                  height: 200,
+                  height: 400,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
@@ -78,9 +69,9 @@ class DailyStudyScreen2 extends StatelessWidget {
                     alignment: Alignment.center,
                     children: [
                       Text(
-                        '행복',
+                        '친구에게 선물을 받아 행복해요',
                         style: TextStyle(
-                          fontSize: 60,
+                          fontSize: 30,
                           fontFamily: 'BMJUA',
                           color: AppColors.textBlack,
                         ),
@@ -89,46 +80,72 @@ class DailyStudyScreen2 extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20),
-                Container(
-                  width: 300,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 10,
-                        spreadRadius: 2,
-                        offset: Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.play_arrow,
-                      size: 70,
-                      color: AppColors.textPink,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          width: 150,
+                          height: 150,
+                          decoration: BoxDecoration(
+                            color: AppColors.buttonYellow,
+                            borderRadius: BorderRadius.circular(45),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 10,
+                                spreadRadius: 2,
+                                offset: Offset(0, 5),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Image.asset(
+                            'assets/icons/icon_review.png',
+                            fit: BoxFit.cover,
+                            height: 95,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
+                    SizedBox(width: 20),
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          width: 150,
+                          height: 150,
+                          decoration: BoxDecoration(
+                            color: AppColors.buttonYellow,
+                            borderRadius: BorderRadius.circular(45),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 10,
+                                spreadRadius: 2,
+                                offset: Offset(0, 5),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Image.asset(
+                            'assets/icons/icon_sign.png',
+                            fit: BoxFit.cover,
+                            height: 95,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ],
             ),
-          ),
-          Positioned(
-            top: 250,
-            left: MediaQuery.of(context).size.width / 2 - 35,
-            child: Align(
-                alignment: Alignment.center,
-                child: GestureDetector(
-                    onTap: () {
-                      // 발음이 들리도록 구현할 부분
-                    },
-                    child: Image.asset(
-                      'assets/icons/icon_sound.png',
-                      width: 70,
-                      height: 70,
-                    ))),
           ),
           Positioned(
             bottom: 30,

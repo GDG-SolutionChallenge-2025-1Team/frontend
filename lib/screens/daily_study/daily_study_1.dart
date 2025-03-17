@@ -116,7 +116,7 @@ class DailyStudyScreen1 extends StatelessWidget {
             right: 0,
             child: Center(
               child: Text(
-                '3',
+                '2',
                 style: TextStyle(
                   fontSize: 60,
                   fontWeight: FontWeight.bold,
