@@ -168,7 +168,7 @@ class DailyStudyScreen4 extends StatelessWidget {
             right: 20,
             child: GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, AppRoutes.dailyStudy3);
+                Navigator.pushNamed(context, AppRoutes.dailyStudy5);
               },
               child: Image.asset(
                 'assets/icons/icon_next_button.png',
@@ -183,7 +183,7 @@ class DailyStudyScreen4 extends StatelessWidget {
             right: 0,
             child: Center(
               child: Text(
-                '4',
+                '5',
                 style: TextStyle(
                   fontSize: 60,
                   fontWeight: FontWeight.bold,
