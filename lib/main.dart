@@ -13,6 +13,8 @@ import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/daily_stud
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/daily_study/daily_study_5.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/review/review.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/calendar/calendar.dart';
+import 'package:provider/provider.dart';
+import 'package:gdg_soogsil_solution_challenge_1team_frontend/providers/learning_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,21 +30,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      initialRoute: AppRoutes.start, // 시작 화면을 초기 라우트로 설정
-      routes: {
-        AppRoutes.start: (context) => StartScreen(),
-        AppRoutes.home: (context) => HomeScreen(),
-        AppRoutes.settings: (context) => SettingsScreen(),
-        AppRoutes.dailyStudy: (context) => DailyStudyScreen(),
-        AppRoutes.review: (context) => ReviewScreen(),
-        AppRoutes.calendar: (context) => CalendarScreen(),
-        AppRoutes.dailyStudy1: (context) => DailyStudyScreen1(),
-        AppRoutes.dailyStudy2: (context) => DailyStudyScreen2(),
-        AppRoutes.dailyStudy3: (context) => DailyStudyScreen3(),
-        AppRoutes.dailyStudy4: (context) => DailyStudyScreen4(),
-        AppRoutes.dailyStudy5: (context) => DailyStudyScreen5(),
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => LearningProvider()),
+      ],
+      child: MaterialApp(
+        initialRoute: AppRoutes.start,
+        routes: {
+          AppRoutes.start: (context) => StartScreen(),
+          AppRoutes.home: (context) => HomeScreen(),
+          AppRoutes.settings: (context) => SettingsScreen(),
+          AppRoutes.dailyStudy: (context) => DailyStudyScreen(),
+          AppRoutes.dailyStudy1: (context) => DailyStudyScreen1(),
+          AppRoutes.dailyStudy2: (context) => DailyStudyScreen2(),
+          AppRoutes.dailyStudy3: (context) => DailyStudyScreen3(),
+          AppRoutes.dailyStudy4: (context) => DailyStudyScreen4(),
+          AppRoutes.dailyStudy5: (context) => DailyStudyScreen5(),
+          AppRoutes.review: (context) => ReviewScreen(),
+          AppRoutes.calendar: (context) => CalendarScreen(),
+        },
+      ),
     );
   }
 }

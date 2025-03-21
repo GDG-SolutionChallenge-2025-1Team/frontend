@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/core/theme/app_colors.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/widgets/wave_painter.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/routes.dart';
+import 'package:provider/provider.dart';
+import 'package:gdg_soogsil_solution_challenge_1team_frontend/providers/learning_provider.dart';
 
 class DailyStudyScreen1 extends StatelessWidget {
   const DailyStudyScreen1({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final learningProvider = Provider.of<LearningProvider>(context);
+
     return Scaffold(
       body: Stack(
         children: [
@@ -83,6 +87,7 @@ class DailyStudyScreen1 extends StatelessWidget {
             left: 20,
             child: GestureDetector(
               onTap: () {
+                learningProvider.decreasePage();
                 Navigator.pop(context);
               },
               child: Transform(
@@ -101,6 +106,7 @@ class DailyStudyScreen1 extends StatelessWidget {
             right: 20,
             child: GestureDetector(
               onTap: () {
+                learningProvider.goToNextPage();
                 Navigator.pushNamed(context, AppRoutes.dailyStudy2);
               },
               child: Image.asset(
@@ -116,7 +122,7 @@ class DailyStudyScreen1 extends StatelessWidget {
             right: 0,
             child: Center(
               child: Text(
-                '2',
+                '${learningProvider.currentPage}',
                 style: TextStyle(
                   fontSize: 60,
                   fontWeight: FontWeight.bold,

@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/core/theme/app_colors.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/widgets/wave_painter.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/routes.dart';
+import 'package:provider/provider.dart';
+import 'package:gdg_soogsil_solution_challenge_1team_frontend/providers/learning_provider.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class DailyStudyScreen4 extends StatelessWidget {
   const DailyStudyScreen4({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final learningProvider = Provider.of<LearningProvider>(context);
+    final audioPlayer = AudioPlayer();
+
     return Scaffold(
       body: Stack(
         children: [
@@ -65,14 +71,19 @@ class DailyStudyScreen4 extends StatelessWidget {
                       ),
                     ],
                   ),
+                  child: Image.network(
+                    learningProvider.currentStudy?.sentenceImageUrl ?? '',
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 SizedBox(height: 20),
                 Align(
                   alignment: Alignment.center,
                   child: Text(
-                    '친구에게 선물을 받아\n행복해요',
+                    learningProvider.sentence,
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 25,
+                      fontFamily: 'BMJUA',
                       color: AppColors.textBlack,
                     ),
                   ),
@@ -102,12 +113,19 @@ class DailyStudyScreen4 extends StatelessWidget {
                         ),
                         Align(
                           alignment: Alignment.center,
-                          child: Image.asset(
-                            'assets/icons/icon_review.png',
-                            fit: BoxFit.cover,
-                            height: 95,
+                          child: GestureDetector(
+                            onTap: () {
+                              audioPlayer.play(UrlSource(learningProvider
+                                      .currentStudy?.sentenceSoundUrl ??
+                                  ''));
+                            },
+                            child: Image.asset(
+                              'assets/icons/icon_review.png',
+                              fit: BoxFit.cover,
+                              height: 95,
+                            ),
                           ),
-                        ),
+                        )
                       ],
                     ),
                     SizedBox(width: 20),
@@ -150,6 +168,7 @@ class DailyStudyScreen4 extends StatelessWidget {
             left: 20,
             child: GestureDetector(
               onTap: () {
+                learningProvider.decreasePage();
                 Navigator.pop(context);
               },
               child: Transform(
@@ -168,6 +187,7 @@ class DailyStudyScreen4 extends StatelessWidget {
             right: 20,
             child: GestureDetector(
               onTap: () {
+                learningProvider.goToNextPage();
                 Navigator.pushNamed(context, AppRoutes.dailyStudy5);
               },
               child: Image.asset(
@@ -183,7 +203,7 @@ class DailyStudyScreen4 extends StatelessWidget {
             right: 0,
             child: Center(
               child: Text(
-                '5',
+                '${learningProvider.currentPage}',
                 style: TextStyle(
                   fontSize: 60,
                   fontWeight: FontWeight.bold,

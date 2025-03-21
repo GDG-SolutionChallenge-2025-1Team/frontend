@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/core/theme/app_colors.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/widgets/wave_painter.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/routes.dart';
+import 'package:provider/provider.dart';
+import 'package:gdg_soogsil_solution_challenge_1team_frontend/providers/learning_provider.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DailyStudyScreen2 extends StatelessWidget {
   const DailyStudyScreen2({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final learningProvider = Provider.of<LearningProvider>(context);
+    final audioPlayer = AudioPlayer();
+
     return Scaffold(
       body: Stack(
         children: [
@@ -36,7 +43,7 @@ class DailyStudyScreen2 extends StatelessWidget {
             right: 0,
             child: Center(
               child: Text(
-                '1일차',
+                '${learningProvider.currentDay}일차',
                 style: TextStyle(
                   fontSize: 60,
                   fontWeight: FontWeight.bold,
@@ -51,7 +58,7 @@ class DailyStudyScreen2 extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '단어',
+                  learningProvider.word,
                   style: TextStyle(
                     fontSize: 50,
                     fontFamily: 'BMJUA',
@@ -60,34 +67,24 @@ class DailyStudyScreen2 extends StatelessWidget {
                 ),
                 SizedBox(height: 40),
                 Container(
-                  width: 300,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 10,
-                        spreadRadius: 2,
-                        offset: Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Text(
-                        '행복',
-                        style: TextStyle(
-                          fontSize: 60,
-                          fontFamily: 'BMJUA',
-                          color: AppColors.textBlack,
+                    width: 300,
+                    height: 200,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 10,
+                          spreadRadius: 2,
+                          offset: Offset(0, 5),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
+                      ],
+                    ),
+                    child: Image.network(
+                      learningProvider.currentStudy?.wordMediaUrl ?? '',
+                      fit: BoxFit.cover,
+                    )),
                 SizedBox(height: 20),
                 Container(
                   width: 300,
@@ -104,12 +101,15 @@ class DailyStudyScreen2 extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: Center(
-                    child: Icon(
-                      Icons.play_arrow,
-                      size: 70,
-                      color: AppColors.textPink,
-                    ),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      final url =
+                          learningProvider.currentStudy?.wordSignUrl ?? '';
+                      if (await canLaunchUrl(Uri.parse(url))) {
+                        launchUrl(Uri.parse(url));
+                      }
+                    },
+                    child: Text('단어 수화 보기'),
                   ),
                 ),
               ],
@@ -122,7 +122,8 @@ class DailyStudyScreen2 extends StatelessWidget {
                 alignment: Alignment.center,
                 child: GestureDetector(
                     onTap: () {
-                      // 발음이 들리도록 구현할 부분
+                      audioPlayer.play(UrlSource(
+                          learningProvider.currentStudy?.wordSoundUrl ?? ''));
                     },
                     child: Image.asset(
                       'assets/icons/icon_sound.png',
@@ -135,6 +136,7 @@ class DailyStudyScreen2 extends StatelessWidget {
             left: 20,
             child: GestureDetector(
               onTap: () {
+                learningProvider.decreasePage();
                 Navigator.pop(context);
               },
               child: Transform(
@@ -153,6 +155,7 @@ class DailyStudyScreen2 extends StatelessWidget {
             right: 20,
             child: GestureDetector(
               onTap: () {
+                learningProvider.goToNextPage();
                 Navigator.pushNamed(context, AppRoutes.dailyStudy3);
               },
               child: Image.asset(
@@ -168,7 +171,7 @@ class DailyStudyScreen2 extends StatelessWidget {
             right: 0,
             child: Center(
               child: Text(
-                '3',
+                '${learningProvider.currentPage}',
                 style: TextStyle(
                   fontSize: 60,
                   fontWeight: FontWeight.bold,
