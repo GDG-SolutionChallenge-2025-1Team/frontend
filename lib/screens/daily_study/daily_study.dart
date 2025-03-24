@@ -13,6 +13,7 @@ class DailyStudyScreen extends StatelessWidget {
     return Scaffold(
       body: Consumer<LearningProvider>(
         builder: (context, learningProvider, child) {
+          learningProvider.updateLearningData();
           return Stack(
             children: [
               Container(
@@ -51,7 +52,7 @@ class DailyStudyScreen extends StatelessWidget {
                 ),
               ),
               Positioned(
-                top: 150,
+                top: 200,
                 left: 0,
                 right: 0,
                 child: Center(
@@ -76,32 +77,28 @@ class DailyStudyScreen extends StatelessWidget {
                           color: AppColors.textPink,
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              Center(
-                child: Container(
-                  width: 300,
-                  height: 250,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 10,
-                        spreadRadius: 2,
-                        offset: Offset(0, 5),
+                      SizedBox(height: 10),
+                      Container(
+                        width: 300,
+                        height: 250,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 10,
+                              spreadRadius: 2,
+                              offset: Offset(0, 5),
+                            ),
+                          ],
+                        ),
+                        child: Image.network(
+                          learningProvider.currentStudy?.emotionMediaUrl ?? '',
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      learningProvider.emotionMediaUrl, // 이미지 URL 불러오기
-                      fit: BoxFit.cover,
-                    ),
                   ),
                 ),
               ),

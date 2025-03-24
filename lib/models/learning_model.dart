@@ -1,6 +1,6 @@
 class LearningModel {
   final String mainEmotion;
-  final String emotionMediaUrl;
+  final String? emotionMediaUrl;
   final String word;
   final String wordMediaUrl;
   final String? wordSignUrl;
@@ -12,7 +12,7 @@ class LearningModel {
 
   LearningModel({
     required this.mainEmotion,
-    required this.emotionMediaUrl,
+    this.emotionMediaUrl,
     required this.word,
     required this.wordMediaUrl,
     this.wordSignUrl,
@@ -25,7 +25,7 @@ class LearningModel {
   factory LearningModel.fromJson(Map<String, String> json) {
     return LearningModel(
       mainEmotion: json['mainEmotion']!,
-      emotionMediaUrl: json['emotionMediaUrl']!,
+      emotionMediaUrl: json['emotionMediaUrl'],
       word: json['word']!,
       wordMediaUrl: json['wordMediaUrl']!,
       wordSignUrl: json['wordSignUrl'],

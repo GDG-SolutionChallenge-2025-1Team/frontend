@@ -51,7 +51,7 @@ class DailyStudyScreen3 extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.3,
+            top: MediaQuery.of(context).size.height * 0.25,
             left: 0,
             right: 0,
             child: Center(

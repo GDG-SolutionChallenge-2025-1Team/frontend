@@ -29,6 +29,10 @@ class LearningProvider with ChangeNotifier {
     // 두 번째 일차 등의 데이터
   ];
 
+  LearningProvider() {
+    updateLearningData();
+  }
+
   String get mainEmotion {
     return currentStudy?.mainEmotion ?? '기본 감정';
   }
@@ -42,7 +46,12 @@ class LearningProvider with ChangeNotifier {
   }
 
   String get sentence {
-    return currentStudy?.word ?? '기본 문장';
+    return currentStudy?.sentence ?? '기본 문장';
+  }
+
+  String get wordSignUrl {
+    return currentStudy?.wordSignUrl ??
+        'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
   }
 
   void decreasePage() {

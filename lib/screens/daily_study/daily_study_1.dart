@@ -10,129 +10,132 @@ class DailyStudyScreen1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final learningProvider = Provider.of<LearningProvider>(context);
-
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.mainYellow,
-            ),
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.2,
-              child: CustomPaint(
-                painter: WavePainter(
-                  color: AppColors.mainSkyBlue,
-                  isTopWave: true,
+      body: Consumer<LearningProvider>(
+        builder: (context, learningProvider, child) {
+          learningProvider.updateLearningData();
+          return Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.mainYellow,
                 ),
               ),
-            ),
-          ),
-          Positioned(
-            top: 40,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Text(
-                '1일차',
-                style: TextStyle(
-                  fontSize: 60,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPink,
-                  fontFamily: 'BMJUA',
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: MediaQuery.of(context).size.height * 0.3,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Text(
-                '지금은\n단어를\n배우는 시간!',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 60,
-                  color: AppColors.textBrown,
-                  fontFamily: 'BMJUA',
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: -120,
-            left: -50,
-            child: SizedBox(
-              child: ClipRect(
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Image.asset(
-                    'assets/images/image_bear.png',
-                    fit: BoxFit.cover,
-                    height: 500,
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  child: CustomPaint(
+                    painter: WavePainter(
+                      color: AppColors.mainSkyBlue,
+                      isTopWave: true,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-          Positioned(
-            bottom: 30,
-            left: 20,
-            child: GestureDetector(
-              onTap: () {
-                learningProvider.decreasePage();
-                Navigator.pop(context);
-              },
-              child: Transform(
-                alignment: Alignment.center,
-                transform: Matrix4.rotationY(3.1416),
-                child: Image.asset(
-                  'assets/icons/icon_next_button.png',
-                  width: 60,
-                  height: 60,
+              Positioned(
+                top: 40,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: Text(
+                    '1일차',
+                    style: TextStyle(
+                      fontSize: 60,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPink,
+                      fontFamily: 'BMJUA',
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          Positioned(
-            bottom: 30,
-            right: 20,
-            child: GestureDetector(
-              onTap: () {
-                learningProvider.goToNextPage();
-                Navigator.pushNamed(context, AppRoutes.dailyStudy2);
-              },
-              child: Image.asset(
-                'assets/icons/icon_next_button.png',
-                width: 60,
-                height: 60,
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 30,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Text(
-                '${learningProvider.currentPage}',
-                style: TextStyle(
-                  fontSize: 60,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'BMJUA',
-                  color: AppColors.mainSkyBlue,
+              Positioned(
+                top: MediaQuery.of(context).size.height * 0.25,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: Text(
+                    '지금은\n단어를\n배우는 시간!',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 60,
+                      color: AppColors.textBrown,
+                      fontFamily: 'BMJUA',
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        ],
+              Positioned(
+                bottom: -120,
+                left: -50,
+                child: SizedBox(
+                  child: ClipRect(
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Image.asset(
+                        'assets/images/image_bear.png',
+                        fit: BoxFit.cover,
+                        height: 500,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 30,
+                left: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    learningProvider.decreasePage();
+                    Navigator.pop(context);
+                  },
+                  child: Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.rotationY(3.1416),
+                    child: Image.asset(
+                      'assets/icons/icon_next_button.png',
+                      width: 60,
+                      height: 60,
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 30,
+                right: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    learningProvider.goToNextPage();
+                    Navigator.pushNamed(context, AppRoutes.dailyStudy2);
+                  },
+                  child: Image.asset(
+                    'assets/icons/icon_next_button.png',
+                    width: 60,
+                    height: 60,
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 30,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: Text(
+                    '${learningProvider.currentPage}',
+                    style: TextStyle(
+                      fontSize: 60,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'BMJUA',
+                      color: AppColors.mainSkyBlue,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
