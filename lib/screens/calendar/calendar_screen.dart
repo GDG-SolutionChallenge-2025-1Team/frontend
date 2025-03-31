@@ -92,6 +92,7 @@ class CalendarScreen extends StatelessWidget {
                 label,
                 style: TextStyle(
                   fontSize: 25,
+                  fontWeight: FontWeight.w700,
                   fontFamily: 'BMJUA',
                   color: AppColors.textBrown,
                 ),

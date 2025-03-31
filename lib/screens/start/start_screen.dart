@@ -86,6 +86,7 @@ class StartScreen extends StatelessWidget {
                   onLoginSuccess: (User? user) {
                     if (user != null) {
                       print("로그인 성공: ${user.displayName}");
+                      Navigator.pushReplacementNamed(context, '/calendar');
                     } else {
                       print('로그인 실패');
                     }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/calendar/calendar_screen.dart';
+import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/review/review_screen.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/routes.dart';
@@ -37,7 +38,8 @@ class MyApp extends StatelessWidget {
         AppRoutes.start: (context) => StartScreen(),
         AppRoutes.home: (context) => HomeScreen(),
         AppRoutes.settings: (context) => SettingsScreen(),
-        AppRoutes.calendar: (context) => CalendarScreen()
+        AppRoutes.calendar: (context) => CalendarScreen(),
+        AppRoutes.review: (context) => ReviewScreen(),
       },
     );
   }
