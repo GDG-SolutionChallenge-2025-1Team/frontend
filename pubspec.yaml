@@ -37,10 +37,14 @@ dependencies:
   firebase_auth: ^4.17.8
   google_sign_in: ^6.2.1
   firebase_core: ^2.32.0
-
   table_calendar: ^3.0.9
   provider: ^6.0.5
   intl: ^0.18.0
+  audioplayers: ^4.0.1
+  record: ^4.4.4
+  permission_handler: ^11.4.0
+  path_provider: ^2.1.5
+  youtube_player_flutter: ^8.1.1
 
 dev_dependencies:
   flutter_test:
