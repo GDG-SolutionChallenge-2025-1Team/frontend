@@ -41,7 +41,7 @@ class DailyStudyScreen1 extends StatelessWidget {
                 right: 0,
                 child: Center(
                   child: Text(
-                    '1일차',
+                    '${learningProvider.currentDay}일차',
                     style: TextStyle(
                       fontSize: 60,
                       fontWeight: FontWeight.bold,
@@ -88,7 +88,7 @@ class DailyStudyScreen1 extends StatelessWidget {
                 left: 20,
                 child: GestureDetector(
                   onTap: () {
-                    learningProvider.decreasePage();
+                    learningProvider.goToPreviousPage();
                     Navigator.pop(context);
                   },
                   child: Transform(
@@ -107,8 +107,9 @@ class DailyStudyScreen1 extends StatelessWidget {
                 right: 20,
                 child: GestureDetector(
                   onTap: () {
-                    learningProvider.goToNextPage();
-                    Navigator.pushNamed(context, AppRoutes.dailyStudy2);
+                    learningProvider.goToNextPage(() {
+                      Navigator.pushNamed(context, AppRoutes.dailyStudy2);
+                    });
                   },
                   child: Image.asset(
                     'assets/icons/icon_next_button.png',

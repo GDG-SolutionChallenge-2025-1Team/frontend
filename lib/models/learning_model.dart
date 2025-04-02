@@ -1,11 +1,9 @@
+import 'word_item.dart';
+
 class LearningModel {
   final String mainEmotion;
   final String? emotionMediaUrl;
-  final String word;
-  final String wordMediaUrl;
-  final String? wordSignUrl;
-  final String? wordSoundUrl;
-
+  final List<WordItem> words;
   final String sentence;
   final String? sentenceImageUrl;
   final String? sentenceSoundUrl;
@@ -13,23 +11,23 @@ class LearningModel {
   LearningModel({
     required this.mainEmotion,
     this.emotionMediaUrl,
-    required this.word,
-    required this.wordMediaUrl,
-    this.wordSignUrl,
-    this.wordSoundUrl,
+    required this.words,
     required this.sentence,
     this.sentenceImageUrl,
     this.sentenceSoundUrl,
   });
 
   factory LearningModel.fromJson(Map<String, String> json) {
+    final wordsJson = json['words'] as List<dynamic>? ?? [];
+
+    final words = wordsJson.map((wordJson) {
+      return WordItem.fromJson(wordJson as Map<String, dynamic>);
+    }).toList();
+
     return LearningModel(
       mainEmotion: json['mainEmotion']!,
       emotionMediaUrl: json['emotionMediaUrl'],
-      word: json['word']!,
-      wordMediaUrl: json['wordMediaUrl']!,
-      wordSignUrl: json['wordSignUrl'],
-      wordSoundUrl: json['wordSoundUrl'],
+      words: words,
       sentence: json['sentence']!,
       sentenceImageUrl: json['sentenceImageUrl'],
       sentenceSoundUrl: json['sentenceSoundUrl'],

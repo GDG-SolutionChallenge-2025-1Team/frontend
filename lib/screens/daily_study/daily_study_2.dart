@@ -18,11 +18,12 @@ class DailyStudyScreen2 extends StatelessWidget {
     return Scaffold(
       body: Consumer<LearningProvider>(
           builder: (context, learningProvider, child) {
+        final wordItem = learningProvider.currentWordItem;
         final audioPlayer = AudioPlayer();
 
         WidgetsBinding.instance.addPostFrameCallback((_) {
           webViewController.loadRequest(
-            Uri.parse(learningProvider.currentStudy?.wordSignUrl ?? ''),
+            Uri.parse(wordItem.wordSignUrl ?? ''),
           );
         });
 
@@ -66,7 +67,7 @@ class DailyStudyScreen2 extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    learningProvider.word,
+                    wordItem.word,
                     style: TextStyle(
                       fontSize: 50,
                       fontFamily: 'BMJUA',
@@ -92,7 +93,7 @@ class DailyStudyScreen2 extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Image.network(
-                        learningProvider.currentStudy?.wordMediaUrl ?? '',
+                        wordItem.wordMediaUrl,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -128,8 +129,7 @@ class DailyStudyScreen2 extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () {
                     audioPlayer.play(
-                      UrlSource(
-                          learningProvider.currentStudy?.wordSoundUrl ?? ''),
+                      UrlSource(wordItem.wordSoundUrl ?? ''),
                     );
                   },
                   child: Image.asset(
@@ -145,7 +145,7 @@ class DailyStudyScreen2 extends StatelessWidget {
               left: 20,
               child: GestureDetector(
                 onTap: () {
-                  learningProvider.decreasePage();
+                  learningProvider.goToPreviousPage();
                   Navigator.pop(context);
                 },
                 child: Transform(
@@ -164,8 +164,13 @@ class DailyStudyScreen2 extends StatelessWidget {
               right: 20,
               child: GestureDetector(
                 onTap: () {
-                  learningProvider.goToNextPage();
-                  Navigator.pushNamed(context, AppRoutes.dailyStudy3);
+                  if (learningProvider.isLastWord) {
+                    learningProvider.goToNextPage(() {
+                      Navigator.pushNamed(context, AppRoutes.dailyStudy3);
+                    });
+                  } else {
+                    learningProvider.goToNextPage(() {});
+                  }
                 },
                 child: Image.asset(
                   'assets/icons/icon_next_button.png',

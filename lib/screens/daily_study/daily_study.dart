@@ -107,7 +107,7 @@ class DailyStudyScreen extends StatelessWidget {
                 left: 20,
                 child: GestureDetector(
                   onTap: () {
-                    learningProvider.decreasePage();
+                    learningProvider.goToPreviousPage();
                     Navigator.pop(context);
                   },
                   child: Transform(
@@ -126,8 +126,9 @@ class DailyStudyScreen extends StatelessWidget {
                 right: 20,
                 child: GestureDetector(
                   onTap: () {
-                    learningProvider.goToNextPage();
-                    Navigator.pushNamed(context, AppRoutes.dailyStudy1);
+                    learningProvider.goToNextPage(() {
+                      Navigator.pushNamed(context, AppRoutes.dailyStudy1);
+                    });
                   },
                   child: Image.asset(
                     'assets/icons/icon_next_button.png',
