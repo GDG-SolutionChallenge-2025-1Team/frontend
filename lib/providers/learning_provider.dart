@@ -86,38 +86,53 @@ class LearningProvider with ChangeNotifier {
     return _wordIndex >= (currentStudy?.words.length ?? 1) - 1;
   }
 
-  void goToPreviousPage() {
+  bool goToNextWord() {
+    if (_wordIndex < (currentStudy?.words.length ?? 1) - 1) {
+      _wordIndex++;
+      notifyListeners();
+      return true;
+    }
+    return false;
+  }
+
+  bool goToPreviousWord() {
     if (_wordIndex > 0) {
       _wordIndex--;
-    } else if (_currentPage > 1) {
       _currentPage--;
+      notifyListeners();
+      return true;
     }
-    notifyListeners();
+    return false;
+  }
+
+  void goToPreviousPage() {
+    if (_currentPage > 1) {
+      _currentPage--;
+      _wordIndex = 0;
+      notifyListeners();
+    }
   }
 
   void goToNextPage(VoidCallback onNavigation) {
-    final int wordPageCount = currentStudy?.words.length ?? 0;
     if (_currentPage < 8) {
       _currentPage++;
-
-      if (_currentPage <= wordPageCount) {
-        _wordIndex++;
-      }
     } else {
       currentDay++;
-      _currentPage = 1;
-      _wordIndex = 0;
-      updateLearningData();
+      updateLearningData(resetPage: true);
     }
     notifyListeners();
     onNavigation();
   }
 
-  void updateLearningData() {
+  void updateLearningData({bool resetPage = false}) {
     if (currentDay <= learningData.length) {
       currentStudy = learningData[currentDay - 1];
     } else {
       currentStudy = null;
+    }
+    if (resetPage) {
+      _currentPage = 1;
+      _wordIndex = 0;
     }
     notifyListeners();
   }

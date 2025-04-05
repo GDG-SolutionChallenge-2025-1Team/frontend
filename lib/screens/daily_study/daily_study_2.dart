@@ -145,8 +145,11 @@ class DailyStudyScreen2 extends StatelessWidget {
               left: 20,
               child: GestureDetector(
                 onTap: () {
-                  learningProvider.goToPreviousPage();
-                  Navigator.pop(context);
+                  final moved = learningProvider.goToPreviousWord();
+                  if (!moved) {
+                    learningProvider.goToPreviousPage();
+                    Navigator.pop(context);
+                  }
                 },
                 child: Transform(
                   alignment: Alignment.center,
@@ -164,7 +167,8 @@ class DailyStudyScreen2 extends StatelessWidget {
               right: 20,
               child: GestureDetector(
                 onTap: () {
-                  if (learningProvider.isLastWord) {
+                  bool moved = learningProvider.goToNextWord();
+                  if (!moved) {
                     learningProvider.goToNextPage(() {
                       Navigator.pushNamed(context, AppRoutes.dailyStudy3);
                     });

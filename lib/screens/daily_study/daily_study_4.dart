@@ -4,10 +4,22 @@ import 'package:gdg_soogsil_solution_challenge_1team_frontend/widgets/wave_paint
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/routes.dart';
 import 'package:provider/provider.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/providers/learning_provider.dart';
+import 'package:gdg_soogsil_solution_challenge_1team_frontend/models/word_item.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
-class DailyStudyScreen4 extends StatelessWidget {
+class DailyStudyScreen4 extends StatefulWidget {
   const DailyStudyScreen4({super.key});
+
+  @override
+  State<DailyStudyScreen4> createState() => _DailyStudyScreen4State();
+}
+
+class _DailyStudyScreen4State extends State<DailyStudyScreen4> {
+  WordItem? selectedWord;
+  final WebViewController _webViewController = WebViewController()
+    ..setJavaScriptMode(JavaScriptMode.unrestricted);
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   @override
   Widget build(BuildContext context) {
@@ -15,14 +27,13 @@ class DailyStudyScreen4 extends StatelessWidget {
       body: Consumer<LearningProvider>(
         builder: (context, learningProvider, child) {
           learningProvider.updateLearningData();
-          final audioPlayer = AudioPlayer();
+          final sentence = learningProvider.sentence;
+          final words = learningProvider.currentStudy?.words ?? [];
 
           return Stack(
             children: [
               Container(
-                decoration: BoxDecoration(
-                  color: AppColors.mainYellow,
-                ),
+                decoration: BoxDecoration(color: AppColors.mainYellow),
               ),
               Positioned(
                 top: 0,
@@ -83,16 +94,49 @@ class DailyStudyScreen4 extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 20),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        learningProvider.sentence,
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontFamily: 'BMJUA',
-                          color: AppColors.textBlack,
-                        ),
-                      ),
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: sentence.split(' ').map((word) {
+                        final matched = words.firstWhere(
+                          (w) => word.contains(w.word),
+                          orElse: () => WordItem(word: '', wordMediaUrl: ''),
+                        );
+
+                        final isMatched = matched.word.isNotEmpty;
+
+                        return GestureDetector(
+                          onTap: isMatched
+                              ? () {
+                                  setState(() {
+                                    selectedWord = matched;
+                                    _webViewController.loadRequest(
+                                      Uri.parse(matched.wordSignUrl ?? ''),
+                                    );
+                                  });
+                                }
+                              : null,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: isMatched
+                                  ? AppColors.textPink.withAlpha(180)
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              word,
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontFamily: 'BMJUA',
+                                color: AppColors.textBlack,
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
                     ),
                     SizedBox(height: 20),
                     Row(
@@ -117,21 +161,19 @@ class DailyStudyScreen4 extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Align(
-                              alignment: Alignment.center,
-                              child: GestureDetector(
-                                onTap: () {
-                                  audioPlayer.play(UrlSource(learningProvider
+                            GestureDetector(
+                              onTap: () {
+                                _audioPlayer.play(
+                                  UrlSource(learningProvider
                                           .currentStudy?.sentenceSoundUrl ??
-                                      ''));
-                                },
-                                child: Image.asset(
-                                  'assets/icons/icon_review.png',
-                                  fit: BoxFit.cover,
-                                  height: 95,
-                                ),
+                                      ''),
+                                );
+                              },
+                              child: Image.asset(
+                                'assets/icons/icon_review.png',
+                                height: 95,
                               ),
-                            )
+                            ),
                           ],
                         ),
                         SizedBox(width: 20),
@@ -154,13 +196,9 @@ class DailyStudyScreen4 extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Align(
-                              alignment: Alignment.center,
-                              child: Image.asset(
-                                'assets/icons/icon_sign.png',
-                                fit: BoxFit.cover,
-                                height: 95,
-                              ),
+                            Image.asset(
+                              'assets/icons/icon_sign.png',
+                              height: 95,
                             ),
                           ],
                         ),
@@ -169,6 +207,109 @@ class DailyStudyScreen4 extends StatelessWidget {
                   ],
                 ),
               ),
+
+              if (selectedWord != null)
+                Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.85,
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    decoration: BoxDecoration(
+                      color: AppColors.textPink,
+                      borderRadius: BorderRadius.circular(24),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 10,
+                          offset: Offset(0, 4),
+                        )
+                      ],
+                    ),
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                selectedWord!.word,
+                                style: TextStyle(
+                                  fontSize: 40,
+                                  color: AppColors.textBlack,
+                                  fontFamily: 'BMJUA',
+                                ),
+                              ),
+                              SizedBox(height: 30),
+                              Stack(
+                                clipBehavior: Clip.none,
+                                alignment: Alignment.topCenter,
+                                children: [
+                                  Container(
+                                    width: 300,
+                                    height: 200,
+                                    decoration: BoxDecoration(
+                                      color: Colors.black26,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: Image.network(
+                                        selectedWord!.wordMediaUrl,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: -30,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        _audioPlayer.play(
+                                          UrlSource(
+                                              selectedWord!.wordSoundUrl ?? ''),
+                                        );
+                                      },
+                                      child: Image.asset(
+                                        'assets/icons/icon_sound.png',
+                                        width: 70,
+                                        height: 70,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 30),
+                              SizedBox(
+                                width: 300,
+                                height: 300,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: WebViewWidget(
+                                    controller: _webViewController,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                          top: 10,
+                          right: 10,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                selectedWord = null;
+                              });
+                            },
+                            child: Icon(Icons.close,
+                                color: AppColors.textBlack, size: 28),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+              // 이전 / 다음 버튼
               Positioned(
                 bottom: 30,
                 left: 20,
