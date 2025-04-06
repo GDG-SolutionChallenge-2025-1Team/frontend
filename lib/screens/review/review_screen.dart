@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:record/record.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/core/theme/app_colors.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/widgets/wave_painter.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/core/constants/app_assets.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class ReviewScreen extends StatefulWidget {
   @override
@@ -15,11 +14,11 @@ class ReviewScreen extends StatefulWidget {
 
 class _ReviewScreenState extends State<ReviewScreen> {
   final AudioPlayer _audioPlayer = AudioPlayer();
-  final Record _recorder = Record();
+  final stt.SpeechToText _speechToText = stt.SpeechToText();
 
   bool isPlaying = false;
-  bool isRecording = false;
-  String? recordedFilePath;
+  bool isListening = false;
+  String recognizedText = '';
 
   final String text = '친구에게 선물을 받아 행복해요';
   final String audioUrl =
@@ -31,7 +30,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
       builder: (BuildContext context) {
         YoutubePlayerController _controller = YoutubePlayerController(
           initialVideoId: YoutubePlayer.convertUrlToId(
-            ' https://youtube.com/shorts/zfg55AimANg?si=dFI_xtKc60G2XnNf', // 원하는 유튜브 링크로 교체
+            'https://youtube.com/shorts/zfg55AimANg?si=dFI_xtKc60G2XnNf',
           )!,
           flags: const YoutubePlayerFlags(
             autoPlay: false,
@@ -62,7 +61,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 ),
                 const SizedBox(height: 16),
                 Align(
-                  alignment: Alignment.center, // 가로 중앙 정렬
+                  alignment: Alignment.center,
                   child: AspectRatio(
                     aspectRatio: 9 / 16,
                     child: ClipRRect(
@@ -99,8 +98,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
   @override
   void initState() {
     super.initState();
-
-    // 오디오 종료 감지 후 상태 업데이트
     _audioPlayer.onPlayerComplete.listen((event) {
       setState(() {
         isPlaying = false;
@@ -110,7 +107,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
   @override
   void dispose() {
-    _recorder.dispose();
     _audioPlayer.dispose();
     super.dispose();
   }
@@ -133,96 +129,33 @@ class _ReviewScreenState extends State<ReviewScreen> {
     }
   }
 
-  Future<void> _handleRecordToggle() async {
-    if (!isRecording) {
-      // 디버깅용 로그 추가
-      print('녹음 시작 시도...');
+  Future<void> _toggleSpeechToText() async {
+    final micStatus = await Permission.microphone.request();
+    if (!micStatus.isGranted) return;
 
-      // 마이크 권한 요청
-      final status = await Permission.microphone.request();
+    if (!_speechToText.isListening) {
+      bool available = await _speechToText.initialize(
+        onStatus: (status) => print('STT 상태: $status'),
+        onError: (error) => print('STT 오류: $error'),
+      );
 
-      if (status.isPermanentlyDenied) {
-        // 설정 화면으로 유도
-        await showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: Text('마이크 권한 필요'),
-            content: Text('녹음을 위해 마이크 권한이 필요합니다. 설정에서 권한을 허용해주세요.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('취소'),
-              ),
-              TextButton(
-                onPressed: () {
-                  openAppSettings(); // 앱 설정으로 이동
-                  Navigator.of(context).pop();
-                },
-                child: Text('설정 열기'),
-              ),
-            ],
-          ),
+      if (available) {
+        setState(() => isListening = true);
+        _speechToText.listen(
+          onResult: (result) {
+            setState(() {
+              recognizedText = result.recognizedWords;
+            });
+          },
+          localeId: 'ko_KR', // ✅ 꼭 추가해야 한국어 인식 가능
+          pauseFor: Duration(seconds: 3),
         );
-        return;
-      }
-
-      // 녹음 설정
-      final dir = await getTemporaryDirectory();
-      final path = '${dir.path}/my_voice.m4a';
-      print('녹음 파일 경로: $path');
-
-      try {
-        // 권한 확인
-        final hasPermission = await _recorder.hasPermission();
-        print('record 패키지 권한 확인: $hasPermission');
-
-        if (hasPermission) {
-          // 녹음 시작
-          print('녹음 시작 중...');
-          await _recorder.start(
-            path: path,
-            encoder: AudioEncoder.aacLc,
-            bitRate: 128000,
-            samplingRate: 44100,
-          );
-          print('녹음 시작됨!');
-
-          setState(() {
-            isRecording = true;
-            recordedFilePath = path;
-          });
-        } else {
-          print('record 패키지가 권한이 없다고 보고함');
-        }
-      } catch (e) {
-        print('녹음 시작 중 오류 발생: $e');
+      } else {
+        print('STT 사용 불가');
       }
     } else {
-      // 녹음 중지
-      print('녹음 중지 시도...');
-      try {
-        final path = await _recorder.stop();
-        print('녹음 중지됨, 저장된 경로: $path');
-        setState(() {
-          isRecording = false;
-          if (path != null) {
-            recordedFilePath = path;
-          }
-        });
-      } catch (e) {
-        print('녹음 중지 중 오류 발생: $e');
-        setState(() {
-          isRecording = false;
-        });
-      }
-    }
-  }
-
-  Future<void> _playMyVoice() async {
-    if (recordedFilePath != null) {
-      await _audioPlayer.play(DeviceFileSource(recordedFilePath!));
+      await _speechToText.stop();
+      setState(() => isListening = false);
     }
   }
 
@@ -235,7 +168,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
       body: Stack(
         alignment: Alignment.center,
         children: [
-          // 배경 물결
           Positioned(
             top: 0,
             left: 0,
@@ -251,7 +183,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
               ),
             ),
           ),
-
           Positioned(
             top: 60,
             left: 16,
@@ -263,33 +194,27 @@ class _ReviewScreenState extends State<ReviewScreen> {
               },
             ),
           ),
-
           Positioned(
             top: 60,
             child: Text(
               'DAY 1',
               style: const TextStyle(
-                fontFamily: 'Modak', // ✅ 폰트 이름 정확히 일치해야 함!
+                fontFamily: 'Modak',
                 fontSize: 80,
                 color: AppColors.textPink,
               ),
             ),
           ),
-
-          // 곰돌이 이미지
           Align(
             alignment: Alignment.center,
             child: GestureDetector(
-              onTap: _playMyVoice,
+              onTap: _toggleSpeechToText,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    '나를 클릭하면 너의 목소리가 들려!',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.brown[600],
-                    ),
+                    isListening ? '듣고 있어요...' : '곰돌이를 눌러 말해보세요!',
+                    style: TextStyle(fontSize: 20, color: Colors.brown[600]),
                   ),
                   const SizedBox(height: 12),
                   Image.asset(
@@ -301,7 +226,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
               ),
             ),
           ),
-
           Positioned(
             bottom: screenHeight * 0.1,
             child: Column(
@@ -309,18 +233,14 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 Text(
                   text,
                   style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.brown[700],
-                  ),
+                      fontSize: 28,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.brown[700]),
                 ),
                 const SizedBox(height: 30),
-
-                // ▶️ / 🎙️ 버튼 가로 정렬
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // 문장 재생 버튼
                     GestureDetector(
                       onTap: _handleAudioTap,
                       child: Container(
@@ -337,32 +257,26 @@ class _ReviewScreenState extends State<ReviewScreen> {
                         ),
                       ),
                     ),
-
                     const SizedBox(width: 24),
-
-                    // 내 발음 녹음 버튼
                     GestureDetector(
-                      onTap: _handleRecordToggle,
+                      onTap: _toggleSpeechToText,
                       child: Container(
                         width: 64,
                         height: 64,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: isRecording
+                          color: isListening
                               ? Colors.red.withOpacity(0.2)
-                              : Colors.brown.withOpacity(0.2),
+                              : Colors.green.withOpacity(0.2),
                         ),
                         child: Icon(
                           Icons.mic,
                           size: 36,
-                          color: isRecording ? Colors.red : Colors.brown,
+                          color: isListening ? Colors.red : Colors.green,
                         ),
                       ),
                     ),
-
                     const SizedBox(width: 24),
-
-                    // ▶️ 새 동영상 버튼
                     GestureDetector(
                       onTap: _showVideoDialog,
                       child: Container(
@@ -381,16 +295,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
                     ),
                   ],
                 ),
-
-                const SizedBox(height: 12),
-
-                // 상태 텍스트 아래에 살짝 표시 (선택)
+                const SizedBox(height: 20),
                 Text(
-                  isRecording ? '녹음 중...' : '내 발음을 녹음해보세요',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: isRecording ? Colors.red : Colors.brown[400],
-                  ),
+                  recognizedText,
+                  style: TextStyle(fontSize: 18, color: Colors.brown[800]),
                 ),
               ],
             ),

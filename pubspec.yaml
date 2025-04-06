@@ -45,6 +45,7 @@ dependencies:
   permission_handler: ^11.4.0
   path_provider: ^2.1.5
   youtube_player_flutter: ^8.1.1
+  speech_to_text: ^6.3.0
 
 dev_dependencies:
   flutter_test:
