@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/core/theme/app_colors.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/widgets/wave_painter.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/routes.dart';
+import 'package:provider/provider.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/providers/learning_provider.dart';
 
-class DailyStudyScreen extends StatelessWidget {
-  const DailyStudyScreen({super.key});
+class DailyStudyScreen1 extends StatelessWidget {
+  const DailyStudyScreen1({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -52,53 +52,34 @@ class DailyStudyScreen extends StatelessWidget {
                 ),
               ),
               Positioned(
-                top: 200,
+                top: MediaQuery.of(context).size.height * 0.25,
                 left: 0,
                 right: 0,
                 child: Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        '오늘의 주제!',
-                        style: TextStyle(
-                          fontSize: 40,
-                          color: AppColors.textBrown,
-                          fontFamily: 'BMJUA',
-                        ),
+                  child: Text(
+                    '지금은\n단어를\n배우는 시간!',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 60,
+                      color: AppColors.textBrown,
+                      fontFamily: 'BMJUA',
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: -120,
+                left: -50,
+                child: SizedBox(
+                  child: ClipRect(
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Image.asset(
+                        'assets/images/image_bear.png',
+                        fit: BoxFit.cover,
+                        height: 500,
                       ),
-                      SizedBox(height: 10),
-                      Text(
-                        learningProvider.mainEmotion,
-                        style: TextStyle(
-                          fontSize: 60,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'BMJUA',
-                          color: AppColors.textPink,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Container(
-                        width: 300,
-                        height: 250,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 10,
-                              spreadRadius: 2,
-                              offset: Offset(0, 5),
-                            ),
-                          ],
-                        ),
-                        child: Image.network(
-                          learningProvider.currentStudy?.emotionMediaUrl ?? '',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
@@ -127,7 +108,7 @@ class DailyStudyScreen extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () {
                     learningProvider.goToNextPage(() {
-                      Navigator.pushNamed(context, AppRoutes.dailyStudy1);
+                      Navigator.pushNamed(context, AppRoutes.dailyStudy2);
                     });
                   },
                   child: Image.asset(
