@@ -14,9 +14,6 @@ import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/daily_stud
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/daily_study/daily_study_3.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/daily_study/daily_study_4.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/daily_study/daily_study_5.dart';
-import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/review/review.dart';
-import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/calendar/calendar.dart';
-import 'package:provider/provider.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/providers/learning_provider.dart';
 
 import "./provider/calendar_provider.dart";
