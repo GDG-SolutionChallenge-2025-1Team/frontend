@@ -50,6 +50,25 @@ class _DailyStudyScreen4State extends State<DailyStudyScreen4> {
                 ),
               ),
               Positioned(
+                top: 20,
+                left: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    learningProvider.resetCurrentPage();
+                    Navigator.pushNamed(context, AppRoutes.home);
+                  },
+                  child: Text(
+                    '고사리',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.mainYellow,
+                      fontFamily: 'BMJUA',
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
                 top: 40,
                 left: 0,
                 right: 0,

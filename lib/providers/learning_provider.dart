@@ -257,4 +257,10 @@ class LearningProvider with ChangeNotifier {
   }
 
   String get pageText => '$_currentPage';
+
+  void resetCurrentPage() {
+    _currentPage = 1;
+    _wordIndex = 0;
+    notifyListeners();
+  }
 }
