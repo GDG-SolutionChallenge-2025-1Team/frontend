@@ -5,8 +5,18 @@ import 'package:gdg_soogsil_solution_challenge_1team_frontend/routes.dart';
 import 'package:provider/provider.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/providers/learning_provider.dart';
 
-class DailyStudyScreen3 extends StatelessWidget {
+class DailyStudyScreen3 extends StatefulWidget {
   const DailyStudyScreen3({super.key});
+
+  @override
+  State<DailyStudyScreen3> createState() => _DailyStudyScreen3State();
+}
+
+class _DailyStudyScreen3State extends State<DailyStudyScreen3> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +26,7 @@ class DailyStudyScreen3 extends StatelessWidget {
       body: Stack(
         children: [
           Container(
-            decoration: BoxDecoration(
-              color: AppColors.mainYellow,
-            ),
-          ),
+              decoration: const BoxDecoration(color: AppColors.mainYellow)),
           Positioned(
             top: 0,
             left: 0,
@@ -42,7 +49,7 @@ class DailyStudyScreen3 extends StatelessWidget {
                 learningProvider.resetCurrentPage();
                 Navigator.pushNamed(context, AppRoutes.home);
               },
-              child: Text(
+              child: const Text(
                 '고사리',
                 style: TextStyle(
                   fontSize: 30,
@@ -60,7 +67,7 @@ class DailyStudyScreen3 extends StatelessWidget {
             child: Center(
               child: Text(
                 '${learningProvider.currentDay}일차',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 60,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPink,
@@ -73,7 +80,7 @@ class DailyStudyScreen3 extends StatelessWidget {
             top: MediaQuery.of(context).size.height * 0.25,
             left: 0,
             right: 0,
-            child: Center(
+            child: const Center(
               child: Text(
                 '지금은\n문장을\n배우는 시간!',
                 textAlign: TextAlign.left,
@@ -105,9 +112,12 @@ class DailyStudyScreen3 extends StatelessWidget {
             bottom: 30,
             left: 20,
             child: GestureDetector(
-              onTap: () {
-                learningProvider.goToPreviousPage();
-                Navigator.pop(context);
+              onTap: () async {
+                await learningProvider.changePage(
+                    forward: false,
+                    onNavigation: () {
+                      Navigator.pop(context);
+                    });
               },
               child: Transform(
                 alignment: Alignment.center,
@@ -125,9 +135,11 @@ class DailyStudyScreen3 extends StatelessWidget {
             right: 20,
             child: GestureDetector(
               onTap: () {
-                learningProvider.goToNextPage(() {
-                  Navigator.pushNamed(context, AppRoutes.dailyStudy4);
-                });
+                learningProvider.changePage(
+                    forward: true,
+                    onNavigation: () {
+                      Navigator.pushNamed(context, AppRoutes.dailyStudy4);
+                    });
               },
               child: Image.asset(
                 'assets/icons/icon_next_button.png',
@@ -142,8 +154,8 @@ class DailyStudyScreen3 extends StatelessWidget {
             right: 0,
             child: Center(
               child: Text(
-                '${learningProvider.currentPage}',
-                style: TextStyle(
+                '${learningProvider.currentStudy?.page ?? 1}',
+                style: const TextStyle(
                   fontSize: 60,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'BMJUA',

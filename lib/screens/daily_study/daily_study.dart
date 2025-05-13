@@ -5,19 +5,28 @@ import 'package:gdg_soogsil_solution_challenge_1team_frontend/widgets/wave_paint
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/routes.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/providers/learning_provider.dart';
 
-class DailyStudyScreen extends StatelessWidget {
+class DailyStudyScreen extends StatefulWidget {
   const DailyStudyScreen({super.key});
+
+  @override
+  State<DailyStudyScreen> createState() => _DailyStudyScreenState();
+}
+
+class _DailyStudyScreenState extends State<DailyStudyScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Consumer<LearningProvider>(
         builder: (context, learningProvider, child) {
-          learningProvider.updateLearningData();
           return Stack(
             children: [
               Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: AppColors.mainYellow,
                 ),
               ),
@@ -43,7 +52,7 @@ class DailyStudyScreen extends StatelessWidget {
                     learningProvider.resetCurrentPage();
                     Navigator.pushNamed(context, AppRoutes.home);
                   },
-                  child: Text(
+                  child: const Text(
                     '고사리',
                     style: TextStyle(
                       fontSize: 30,
@@ -61,7 +70,7 @@ class DailyStudyScreen extends StatelessWidget {
                 child: Center(
                   child: Text(
                     '${learningProvider.currentDay}일차',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 60,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPink,
@@ -78,7 +87,7 @@ class DailyStudyScreen extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
+                      const Text(
                         '오늘의 주제!',
                         style: TextStyle(
                           fontSize: 40,
@@ -86,24 +95,24 @@ class DailyStudyScreen extends StatelessWidget {
                           fontFamily: 'BMJUA',
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
                         learningProvider.mainEmotion,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 60,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'BMJUA',
                           color: AppColors.textPink,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Container(
                         width: 300,
                         height: 250,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                               color: Colors.black26,
                               blurRadius: 10,
@@ -113,7 +122,7 @@ class DailyStudyScreen extends StatelessWidget {
                           ],
                         ),
                         child: Image.network(
-                          learningProvider.currentStudy?.emotionMediaUrl ?? '',
+                          learningProvider.emotionMediaUrl,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -125,9 +134,12 @@ class DailyStudyScreen extends StatelessWidget {
                 bottom: 30,
                 left: 20,
                 child: GestureDetector(
-                  onTap: () {
-                    learningProvider.goToPreviousPage();
-                    Navigator.pop(context);
+                  onTap: () async {
+                    await learningProvider.changePage(
+                        forward: false,
+                        onNavigation: () {
+                          Navigator.pop(context);
+                        });
                   },
                   child: Transform(
                     alignment: Alignment.center,
@@ -145,9 +157,11 @@ class DailyStudyScreen extends StatelessWidget {
                 right: 20,
                 child: GestureDetector(
                   onTap: () {
-                    learningProvider.goToNextPage(() {
-                      Navigator.pushNamed(context, AppRoutes.dailyStudy1);
-                    });
+                    learningProvider.changePage(
+                        forward: true,
+                        onNavigation: () {
+                          Navigator.pushNamed(context, AppRoutes.dailyStudy1);
+                        });
                   },
                   child: Image.asset(
                     'assets/icons/icon_next_button.png',
@@ -163,7 +177,7 @@ class DailyStudyScreen extends StatelessWidget {
                 child: Center(
                   child: Text(
                     '${learningProvider.currentPage}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 60,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'BMJUA',

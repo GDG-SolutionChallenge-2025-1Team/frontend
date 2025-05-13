@@ -13,10 +13,10 @@ class WordItem {
 
   factory WordItem.fromJson(Map<String, dynamic> json) {
     return WordItem(
-      word: json['word'] ?? '',
-      wordMediaUrl: json['wordMediaUrl'] ?? '',
-      wordSignUrl: json['wordSignUrl'],
-      wordSoundUrl: json['wordSoundUrl'],
+      word: json['content'] ?? '',
+      wordMediaUrl: json['media'] ?? '',
+      wordSignUrl: json['sign_url'],
+      wordSoundUrl: json['sound_url'],
     );
   }
 }

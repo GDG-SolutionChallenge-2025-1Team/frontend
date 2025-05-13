@@ -4,6 +4,7 @@ import 'package:gdg_soogsil_solution_challenge_1team_frontend/widgets/wave_paint
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/widgets/login/google_login_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/home/home_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
@@ -20,7 +21,7 @@ class StartScreen extends StatelessWidget {
             ),
           ),
 
-          // // 위쪽 파도
+          // 위쪽 파도
           Positioned(
             top: 0,
             left: 0,
@@ -53,7 +54,7 @@ class StartScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // 'GO' 텍스트
+                // '고사리' 텍스트
                 Text(
                   '고사리',
                   style: TextStyle(
@@ -85,10 +86,14 @@ class StartScreen extends StatelessWidget {
 
                 // 구글 로그인 버튼 추가
                 GoogleLoginButton(
-                  // 여기서 콜백함수에서 jwt를 처리하면 될거 같은데
-                  onLoginSuccess: (User? user) {
+                  onLoginSuccess: (User? user) async {
                     if (user != null) {
                       print("로그인 성공: ${user.displayName}");
+
+                      final idToken = await user.getIdToken();
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setString('jwtToken', idToken!);
+
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => HomeScreen()),

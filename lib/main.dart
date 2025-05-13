@@ -16,7 +16,7 @@ import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/daily_stud
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/screens/daily_study/daily_study_5.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/providers/learning_provider.dart';
 
-import "./provider/calendar_provider.dart";
+import "./providers/calendar_provider.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

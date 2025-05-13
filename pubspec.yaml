@@ -48,6 +48,8 @@ dependencies:
   http: ^1.3.0
   audioplayers: ^6.4.0
   webview_flutter: ^4.11.0
+  shared_preferences: ^2.5.3
+  
 
 dev_dependencies:
   flutter_test:

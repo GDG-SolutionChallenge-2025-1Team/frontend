@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gdg_soogsil_solution_challenge_1team_frontend/provider/calendar_provider.dart';
+import 'package:gdg_soogsil_solution_challenge_1team_frontend/providers/calendar_provider.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/routes.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/widgets/calendar/study_calendar.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/widgets/wave_painter.dart';

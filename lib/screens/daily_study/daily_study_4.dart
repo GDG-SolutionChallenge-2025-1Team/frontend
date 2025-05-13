@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/core/theme/app_colors.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/widgets/wave_painter.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/routes.dart';
-import 'package:provider/provider.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/providers/learning_provider.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/models/word_item.dart';
-import 'package:audioplayers/audioplayers.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class DailyStudyScreen4 extends StatefulWidget {
   const DailyStudyScreen4({super.key});
@@ -17,6 +17,8 @@ class DailyStudyScreen4 extends StatefulWidget {
 
 class _DailyStudyScreen4State extends State<DailyStudyScreen4> {
   WordItem? selectedWord;
+  String? selectedSentenceSignUrl;
+
   final WebViewController _webViewController = WebViewController()
     ..setJavaScriptMode(JavaScriptMode.unrestricted);
   final AudioPlayer _audioPlayer = AudioPlayer();
@@ -26,15 +28,17 @@ class _DailyStudyScreen4State extends State<DailyStudyScreen4> {
     return Scaffold(
       body: Consumer<LearningProvider>(
         builder: (context, learningProvider, child) {
-          learningProvider.updateLearningData();
-          final sentence = learningProvider.sentence;
-          final words = learningProvider.currentStudy?.words ?? [];
+          final sentence = learningProvider.currentStudy?.sentence ?? '';
+          final words = learningProvider.currentStudy?.usedWords ?? [];
+          final sentenceImageUrl =
+              learningProvider.currentStudy?.sentenceImageUrl ?? '';
+          final sentenceSoundUrl =
+              learningProvider.currentStudy?.sentenceSoundUrl ?? '';
+          final page = learningProvider.currentStudy?.page ?? 1;
 
           return Stack(
             children: [
-              Container(
-                decoration: BoxDecoration(color: AppColors.mainYellow),
-              ),
+              Container(decoration: BoxDecoration(color: AppColors.mainYellow)),
               Positioned(
                 top: 0,
                 left: 0,
@@ -43,9 +47,7 @@ class _DailyStudyScreen4State extends State<DailyStudyScreen4> {
                   height: MediaQuery.of(context).size.height * 0.2,
                   child: CustomPaint(
                     painter: WavePainter(
-                      color: AppColors.mainSkyBlue,
-                      isTopWave: true,
-                    ),
+                        color: AppColors.mainSkyBlue, isTopWave: true),
                   ),
                 ),
               ),
@@ -106,10 +108,8 @@ class _DailyStudyScreen4State extends State<DailyStudyScreen4> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20),
-                        child: Image.network(
-                          learningProvider.currentStudy?.sentenceImageUrl ?? '',
-                          fit: BoxFit.cover,
-                        ),
+                        child:
+                            Image.network(sentenceImageUrl, fit: BoxFit.cover),
                       ),
                     ),
                     SizedBox(height: 20),
@@ -122,18 +122,28 @@ class _DailyStudyScreen4State extends State<DailyStudyScreen4> {
                           (w) => word.contains(w.word),
                           orElse: () => WordItem(word: '', wordMediaUrl: ''),
                         );
-
                         final isMatched = matched.word.isNotEmpty;
-
                         return GestureDetector(
                           onTap: isMatched
                               ? () {
-                                  setState(() {
-                                    selectedWord = matched;
-                                    _webViewController.loadRequest(
-                                      Uri.parse(matched.wordSignUrl ?? ''),
-                                    );
-                                  });
+                                  final signUrl = matched.wordSignUrl ?? '';
+                                  final isValidUrl =
+                                      Uri.tryParse(signUrl)?.hasAbsolutePath ==
+                                              true &&
+                                          (signUrl.startsWith('http://') ||
+                                              signUrl.startsWith('https://'));
+
+                                  if (isValidUrl) {
+                                    setState(() {
+                                      selectedWord = matched;
+                                      _webViewController
+                                          .loadRequest(Uri.parse(signUrl));
+                                    });
+                                  } else {
+                                    setState(() {
+                                      selectedWord = matched;
+                                    });
+                                  }
                                 }
                               : null,
                           child: Container(
@@ -161,181 +171,52 @@ class _DailyStudyScreen4State extends State<DailyStudyScreen4> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Container(
-                              width: 130,
-                              height: 130,
-                              decoration: BoxDecoration(
-                                color: AppColors.buttonYellow,
-                                borderRadius: BorderRadius.circular(45),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black26,
-                                    blurRadius: 10,
-                                    spreadRadius: 2,
-                                    offset: Offset(0, 5),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                _audioPlayer.play(
-                                  UrlSource(learningProvider
-                                          .currentStudy?.sentenceSoundUrl ??
-                                      ''),
-                                );
-                              },
-                              child: Image.asset(
-                                'assets/icons/icon_review.png',
-                                height: 95,
-                              ),
-                            ),
-                          ],
+                        _buildButton(
+                          icon: 'assets/icons/icon_review.png',
+                          onTap: () =>
+                              _audioPlayer.play(UrlSource(sentenceSoundUrl)),
                         ),
                         SizedBox(width: 20),
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Container(
-                              width: 130,
-                              height: 130,
-                              decoration: BoxDecoration(
-                                color: AppColors.buttonYellow,
-                                borderRadius: BorderRadius.circular(45),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black26,
-                                    blurRadius: 10,
-                                    spreadRadius: 2,
-                                    offset: Offset(0, 5),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Image.asset(
-                              'assets/icons/icon_sign.png',
-                              height: 95,
-                            ),
-                          ],
+                        _buildButton(
+                          icon: 'assets/icons/icon_sign.png',
+                          onTap: () {
+                            final signUrl = learningProvider
+                                    .currentStudy?.sentenceSignUrl ??
+                                '';
+
+                            setState(() {
+                              selectedSentenceSignUrl = signUrl;
+
+                              final isValidUrl =
+                                  Uri.tryParse(signUrl)?.hasAbsolutePath ==
+                                          true &&
+                                      (signUrl.startsWith('http://') ||
+                                          signUrl.startsWith('https://'));
+
+                              if (isValidUrl) {
+                                _webViewController
+                                    .loadRequest(Uri.parse(signUrl));
+                              }
+                            });
+                          },
                         ),
                       ],
                     ),
                   ],
                 ),
               ),
-
-              if (selectedWord != null)
-                Center(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.85,
-                    height: MediaQuery.of(context).size.height * 0.75,
-                    decoration: BoxDecoration(
-                      color: AppColors.textPink,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 10,
-                          offset: Offset(0, 4),
-                        )
-                      ],
-                    ),
-                    child: Stack(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                selectedWord!.word,
-                                style: TextStyle(
-                                  fontSize: 40,
-                                  color: AppColors.textBlack,
-                                  fontFamily: 'BMJUA',
-                                ),
-                              ),
-                              SizedBox(height: 30),
-                              Stack(
-                                clipBehavior: Clip.none,
-                                alignment: Alignment.topCenter,
-                                children: [
-                                  Container(
-                                    width: 300,
-                                    height: 200,
-                                    decoration: BoxDecoration(
-                                      color: Colors.black26,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: Image.network(
-                                        selectedWord!.wordMediaUrl,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: -30,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        _audioPlayer.play(
-                                          UrlSource(
-                                              selectedWord!.wordSoundUrl ?? ''),
-                                        );
-                                      },
-                                      child: Image.asset(
-                                        'assets/icons/icon_sound.png',
-                                        width: 70,
-                                        height: 70,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 30),
-                              SizedBox(
-                                width: 300,
-                                height: 300,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: WebViewWidget(
-                                    controller: _webViewController,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          top: 10,
-                          right: 10,
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                selectedWord = null;
-                              });
-                            },
-                            child: Icon(Icons.close,
-                                color: AppColors.textBlack, size: 28),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-              // 이전 / 다음 버튼
+              if (selectedWord != null) _buildPopup(context),
+              if (selectedSentenceSignUrl != null) _buildSentencePopup(context),
               Positioned(
                 bottom: 30,
                 left: 20,
                 child: GestureDetector(
-                  onTap: () {
-                    learningProvider.goToPreviousPage();
-                    Navigator.pop(context);
+                  onTap: () async {
+                    await learningProvider.changePage(
+                        forward: false,
+                        onNavigation: () {
+                          Navigator.pop(context);
+                        });
                   },
                   child: Transform(
                     alignment: Alignment.center,
@@ -353,9 +234,11 @@ class _DailyStudyScreen4State extends State<DailyStudyScreen4> {
                 right: 20,
                 child: GestureDetector(
                   onTap: () {
-                    learningProvider.goToNextPage(() {
-                      Navigator.pushNamed(context, AppRoutes.dailyStudy5);
-                    });
+                    learningProvider.changePage(
+                        forward: true,
+                        onNavigation: () {
+                          Navigator.pushNamed(context, AppRoutes.dailyStudy5);
+                        });
                   },
                   child: Image.asset(
                     'assets/icons/icon_next_button.png',
@@ -370,7 +253,7 @@ class _DailyStudyScreen4State extends State<DailyStudyScreen4> {
                 right: 0,
                 child: Center(
                   child: Text(
-                    '${learningProvider.currentPage}',
+                    '$page',
                     style: TextStyle(
                       fontSize: 60,
                       fontWeight: FontWeight.bold,
@@ -383,6 +266,192 @@ class _DailyStudyScreen4State extends State<DailyStudyScreen4> {
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildButton({required String icon, required VoidCallback onTap}) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          width: 130,
+          height: 130,
+          decoration: BoxDecoration(
+            color: AppColors.buttonYellow,
+            borderRadius: BorderRadius.circular(45),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                spreadRadius: 2,
+                offset: Offset(0, 5),
+              ),
+            ],
+          ),
+        ),
+        GestureDetector(
+          onTap: onTap,
+          child: Image.asset(icon, height: 95),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPopup(BuildContext context) {
+    return Center(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.85,
+        height: MediaQuery.of(context).size.height * 0.75,
+        decoration: BoxDecoration(
+          color: AppColors.textPink,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black26, blurRadius: 10, offset: Offset(0, 4))
+          ],
+        ),
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    selectedWord!.word,
+                    style: TextStyle(
+                      fontSize: 40,
+                      color: AppColors.textBlack,
+                      fontFamily: 'BMJUA',
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  Stack(
+                    clipBehavior: Clip.none,
+                    alignment: Alignment.topCenter,
+                    children: [
+                      Container(
+                        width: 300,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          color: Colors.black26,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.network(
+                            selectedWord!.wordMediaUrl,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: -30,
+                        child: GestureDetector(
+                          onTap: () => _audioPlayer.play(
+                            UrlSource(selectedWord!.wordSoundUrl ?? ''),
+                          ),
+                          child: Image.asset(
+                            'assets/icons/icon_sound.png',
+                            width: 70,
+                            height: 70,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 30),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: SizedBox(
+                        width: 300,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: WebViewWidget(controller: _webViewController),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              top: 10,
+              right: 10,
+              child: GestureDetector(
+                onTap: () => setState(() => selectedWord = null),
+                child: Icon(Icons.close, color: AppColors.textBlack, size: 28),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSentencePopup(BuildContext context) {
+    return Center(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.85,
+        height: MediaQuery.of(context).size.height * 0.75,
+        padding: const EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+          color: AppColors.textPink,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 10,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                Text(
+                  "문장 수어 영상",
+                  style: TextStyle(
+                    fontSize: 40,
+                    color: AppColors.textBlack,
+                    fontFamily: 'BMJUA',
+                  ),
+                ),
+                SizedBox(height: 30),
+                if (selectedSentenceSignUrl != null &&
+                    selectedSentenceSignUrl!.startsWith('http'))
+                  SizedBox(
+                    width: 300,
+                    height: 400,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: WebViewWidget(controller: _webViewController),
+                    ),
+                  )
+                else
+                  Text(
+                    "제공된 수어 URL이 없습니다.",
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: AppColors.textBlack,
+                      fontFamily: 'BMJUA',
+                    ),
+                  ),
+              ],
+            ),
+            Positioned(
+              top: 10,
+              right: 10,
+              child: GestureDetector(
+                onTap: () => setState(() => selectedSentenceSignUrl = null),
+                child: Icon(Icons.close, color: AppColors.textBlack, size: 28),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

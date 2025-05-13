@@ -5,22 +5,28 @@ import 'package:gdg_soogsil_solution_challenge_1team_frontend/routes.dart';
 import 'package:provider/provider.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/providers/learning_provider.dart';
 
-class DailyStudyScreen1 extends StatelessWidget {
+class DailyStudyScreen1 extends StatefulWidget {
   const DailyStudyScreen1({super.key});
+
+  @override
+  State<DailyStudyScreen1> createState() => _DailyStudyScreen1State();
+}
+
+class _DailyStudyScreen1State extends State<DailyStudyScreen1> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Consumer<LearningProvider>(
         builder: (context, learningProvider, child) {
-          learningProvider.updateLearningData();
           return Stack(
             children: [
               Container(
-                decoration: BoxDecoration(
-                  color: AppColors.mainYellow,
-                ),
-              ),
+                  decoration: const BoxDecoration(color: AppColors.mainYellow)),
               Positioned(
                 top: 0,
                 left: 0,
@@ -43,7 +49,7 @@ class DailyStudyScreen1 extends StatelessWidget {
                     learningProvider.resetCurrentPage();
                     Navigator.pushNamed(context, AppRoutes.home);
                   },
-                  child: Text(
+                  child: const Text(
                     '고사리',
                     style: TextStyle(
                       fontSize: 30,
@@ -61,7 +67,7 @@ class DailyStudyScreen1 extends StatelessWidget {
                 child: Center(
                   child: Text(
                     '${learningProvider.currentDay}일차',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 60,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPink,
@@ -74,7 +80,7 @@ class DailyStudyScreen1 extends StatelessWidget {
                 top: MediaQuery.of(context).size.height * 0.25,
                 left: 0,
                 right: 0,
-                child: Center(
+                child: const Center(
                   child: Text(
                     '지금은\n단어를\n배우는 시간!',
                     textAlign: TextAlign.left,
@@ -106,9 +112,12 @@ class DailyStudyScreen1 extends StatelessWidget {
                 bottom: 30,
                 left: 20,
                 child: GestureDetector(
-                  onTap: () {
-                    learningProvider.goToPreviousPage();
-                    Navigator.pop(context);
+                  onTap: () async {
+                    await learningProvider.changePage(
+                        forward: false,
+                        onNavigation: () {
+                          Navigator.pop(context);
+                        });
                   },
                   child: Transform(
                     alignment: Alignment.center,
@@ -126,9 +135,11 @@ class DailyStudyScreen1 extends StatelessWidget {
                 right: 20,
                 child: GestureDetector(
                   onTap: () {
-                    learningProvider.goToNextPage(() {
-                      Navigator.pushNamed(context, AppRoutes.dailyStudy2);
-                    });
+                    learningProvider.changePage(
+                        forward: true,
+                        onNavigation: () {
+                          Navigator.pushNamed(context, AppRoutes.dailyStudy2);
+                        });
                   },
                   child: Image.asset(
                     'assets/icons/icon_next_button.png',
@@ -143,8 +154,8 @@ class DailyStudyScreen1 extends StatelessWidget {
                 right: 0,
                 child: Center(
                   child: Text(
-                    '${learningProvider.currentPage}',
-                    style: TextStyle(
+                    '${learningProvider.currentStudy?.page ?? 1}',
+                    style: const TextStyle(
                       fontSize: 60,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'BMJUA',

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/core/theme/app_colors.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/widgets/wave_painter.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/routes.dart';
+import 'package:provider/provider.dart';
+import 'package:gdg_soogsil_solution_challenge_1team_frontend/providers/learning_provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,17 +14,17 @@ class HomeScreen extends StatelessWidget {
       body: Stack(
         children: [
           Container(
-            decoration: BoxDecoration(
-              color: AppColors.mainYellow,
-            ),
+            decoration: BoxDecoration(color: AppColors.mainYellow),
           ),
           Positioned(
             top: 0,
             left: 0,
             right: 0,
             child: CustomPaint(
-              size: Size(MediaQuery.of(context).size.width,
-                  MediaQuery.of(context).size.height * 0.4),
+              size: Size(
+                MediaQuery.of(context).size.width,
+                MediaQuery.of(context).size.height * 0.4,
+              ),
               painter: WavePainter(
                 color: AppColors.mainSkyBlue,
                 isTopWave: true,
@@ -54,12 +56,43 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(height: 30),
                 Column(
                   children: [
-                    _buildMenuItem('assets/icons/icon_daily_study.png',
-                        "오늘의 학습", AppRoutes.dailyStudy, context),
-                    _buildMenuItem('assets/icons/icon_review.png', "발음 복습하기",
-                        AppRoutes.review, context),
-                    _buildMenuItem('assets/icons/icon_calendar.png', "달력 보기",
-                        AppRoutes.calendar, context),
+                    _buildMenuItem(
+                      'assets/icons/icon_daily_study.png',
+                      "오늘의 학습",
+                      '',
+                      context,
+                      () async {
+                        final provider = Provider.of<LearningProvider>(context,
+                            listen: false);
+
+                        await provider.updateLearningData(resetPage: true);
+
+                        final int page = provider.currentStudy?.page ?? 1;
+                        final route = getRouteForPage(page);
+
+                        if (context.mounted) {
+                          Navigator.pushNamed(context, route);
+                        }
+                      },
+                    ),
+                    _buildMenuItem(
+                      'assets/icons/icon_review.png',
+                      "발음 복습하기",
+                      AppRoutes.review,
+                      context,
+                      () {
+                        Navigator.pushNamed(context, AppRoutes.review);
+                      },
+                    ),
+                    _buildMenuItem(
+                      'assets/icons/icon_calendar.png',
+                      "달력 보기",
+                      AppRoutes.calendar,
+                      context,
+                      () {
+                        Navigator.pushNamed(context, AppRoutes.calendar);
+                      },
+                    ),
                   ],
                 ),
               ],
@@ -70,12 +103,10 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMenuItem(
-      String imagePath, String label, String routeName, BuildContext context) {
+  Widget _buildMenuItem(String imagePath, String label, String routeName,
+      BuildContext context, VoidCallback onTap) {
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, routeName);
-      },
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: Container(
@@ -107,5 +138,26 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+String getRouteForPage(int page) {
+  switch (page) {
+    case 1:
+      return AppRoutes.dailyStudy;
+    case 2:
+      return AppRoutes.dailyStudy1;
+    case 3:
+    case 4:
+    case 5:
+      return AppRoutes.dailyStudy2;
+    case 6:
+      return AppRoutes.dailyStudy3;
+    case 7:
+      return AppRoutes.dailyStudy4;
+    case 8:
+      return AppRoutes.dailyStudy5;
+    default:
+      return AppRoutes.home;
   }
 }

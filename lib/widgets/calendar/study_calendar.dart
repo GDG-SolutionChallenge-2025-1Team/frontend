@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/core/theme/app_colors.dart';
-import 'package:gdg_soogsil_solution_challenge_1team_frontend/provider/calendar_provider.dart';
+import 'package:gdg_soogsil_solution_challenge_1team_frontend/providers/calendar_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
