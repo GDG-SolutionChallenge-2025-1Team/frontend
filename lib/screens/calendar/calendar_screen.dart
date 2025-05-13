@@ -64,6 +64,7 @@ class CalendarScreen extends StatelessWidget {
                     child: StudyCalendar(),
                   ),
                   _buildMenuItem("복습하기", AppRoutes.review, context),
+                  _buildMenuItem("뒤로가기", AppRoutes.home, context)
                 ]),
           ),
         ],
