@@ -197,10 +197,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
           Positioned(
             top: 60,
             child: Text(
-              'DAY 1',
+              '1일차',
               style: const TextStyle(
-                fontFamily: 'Modak',
-                fontSize: 80,
+                fontFamily: 'BMJUA',
+                fontSize: 65,
                 color: AppColors.textPink,
               ),
             ),
