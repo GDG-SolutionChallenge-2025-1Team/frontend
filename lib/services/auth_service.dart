@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
+import "package:gdg_soogsil_solution_challenge_1team_frontend/utils/token_storage.dart";
+
 import 'dart:io';
 
 class AuthService {
@@ -24,7 +29,31 @@ class AuthService {
           await _auth.signInWithCredential(credential);
       User? user = userCredential.user;
 
-      return user;
+      final String? idToken = await user?.getIdToken();
+
+      if (idToken == null) {
+        return null;
+      }
+
+      print('Bearer $idToken');
+
+      final response = await http.post(
+        Uri.parse(
+            'https://soultionchallenge1team-server-231949036311.asia-northeast3.run.app/login'), // 🔁 백엔드 주소로 교체
+        headers: {
+          HttpHeaders.authorizationHeader: 'Bearer $idToken',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final responseBody = jsonDecode(response.body);
+        final jwt = responseBody['jwt_token'];
+
+        await TokenStorage.saveToken(jwt);
+        return user;
+      } else {
+        return null;
+      }
     } catch (e) {
       print("Google 로그인 오류: $e");
       return null;
