@@ -25,9 +25,6 @@ class AuthService {
         idToken: googleAuth.idToken,
       );
 
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('authToken', googleAuth.idToken ?? '');
-
       final UserCredential userCredential =
           await _auth.signInWithCredential(credential);
       User? user = userCredential.user;

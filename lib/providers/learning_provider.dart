@@ -47,7 +47,7 @@ class LearningProvider with ChangeNotifier {
 
     try {
       final response = await http.get(url, headers: {
-        'Authorization': 'Bearer $jwt',
+        'Authorization': 'Bearer $_jwt',
         'Content-Type': 'application/json',
       });
 
