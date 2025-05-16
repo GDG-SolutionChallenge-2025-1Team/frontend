@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/models/learning_model.dart';
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/models/word_item.dart';
+import 'package:gdg_soogsil_solution_challenge_1team_frontend/utils/token_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -37,29 +38,34 @@ class LearningProvider with ChangeNotifier {
     await _fetchFromAPI(url);
   }
 
-  String? _jwt;
-  void setJwt(String token) {
-    _jwt = token;
-  }
-
   Future<void> _fetchFromAPI(Uri url) async {
-    if (_jwt == null) return;
+    final jwt = await TokenStorage.getToken();
+    if (jwt == null) {
+      print('[LearningProvider] JWT 토큰이 존재하지 않습니다.');
+      return;
+    }
 
     try {
-      final response = await http.get(url, headers: {
-        'Authorization': 'Bearer $_jwt',
-        'Content-Type': 'application/json',
-      });
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $jwt',
+          'Content-Type': 'application/json',
+        },
+      );
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonData =
             jsonDecode(utf8.decode(response.bodyBytes));
+
         currentDay = jsonData['day'] ?? currentDay;
         _currentPage = jsonData['page'] ?? _currentPage;
         currentStudy = LearningModel.fromJson(jsonData);
+      } else {
+        print('[LearningProvider] API 호출 실패 - 상태코드: ${response.statusCode}');
       }
     } catch (e) {
-      // 예외처리
+      print('[LearningProvider] API 호출 중 예외 발생: $e');
     }
   }
 
@@ -78,7 +84,6 @@ class LearningProvider with ChangeNotifier {
   }
 
   String get sentence => currentStudy?.sentence ?? '기본 문장';
-
   String get wordSignUrl => currentWordItem.wordSignUrl ?? '';
 
   bool get isLastWord =>

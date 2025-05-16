@@ -5,6 +5,7 @@ import 'package:gdg_soogsil_solution_challenge_1team_frontend/widgets/wave_paint
 import 'package:gdg_soogsil_solution_challenge_1team_frontend/core/constants/app_assets.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class ReviewScreen extends StatefulWidget {
@@ -19,6 +20,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
   bool isPlaying = false;
   bool isListening = false;
   String recognizedText = '';
+
+  String feedbackText = '';
+  Color feedbackColor = Colors.transparent;
 
   final String text = '친구에게 선물을 받아 행복해요';
   final String audioUrl =
@@ -143,11 +147,23 @@ class _ReviewScreenState extends State<ReviewScreen> {
         setState(() => isListening = true);
         _speechToText.listen(
           onResult: (result) {
-            setState(() {
-              recognizedText = result.recognizedWords;
-            });
+            if (result.finalResult) {
+              final spoken = result.recognizedWords.trim();
+              final expected = text.trim();
+
+              setState(() {
+                recognizedText = spoken;
+                if (spoken == expected) {
+                  feedbackText = '잘했어요!';
+                  feedbackColor = Colors.green;
+                } else {
+                  feedbackText = '다시 시도해보세요.';
+                  feedbackColor = Colors.red;
+                }
+              });
+            }
           },
-          localeId: 'ko_KR', // ✅ 꼭 추가해야 한국어 인식 가능
+          localeId: 'ko_KR',
           pauseFor: Duration(seconds: 3),
         );
       } else {
@@ -299,6 +315,15 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 Text(
                   recognizedText,
                   style: TextStyle(fontSize: 18, color: Colors.brown[800]),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  feedbackText,
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: feedbackColor,
+                  ),
                 ),
               ],
             ),
